@@ -1,4 +1,4 @@
-# Train_ScheduleMake sure that your app suits this basic spec:
+# Train_Schedule
 When adding trains, administrators should be able to submit the following:
 Train Name
 Destination
