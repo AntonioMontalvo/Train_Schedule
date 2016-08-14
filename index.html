@@ -11,19 +11,18 @@
 	<!-- My css -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-	<!-- Firebase Reference -->
+	<!-- Firebase -->
 	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
-	<!-- Moment.js Reference -->
-	<!-- <script src="http://momentjs.com/downloads/moment.js"></script> -->	
+	<!-- Moment.js -->
  	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 </head>
 <body>
 
-<!-- Employee Tracker -->
+<!-- Main Schedule -->
 <div class="container">
 
-	<!-- Jumbotron -->
+	<!-- Jumbotron Heading -->
 	<div class="jumbotron">
 		<h1 class="text-center">Europe Rail System</h1>
 		<h3 class="text-center">Master Schedule</h3>
@@ -32,7 +31,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 	
-		<!-- Current Employees-->
+		<!-- Display Trains-->
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title"><strong>Current Train Schedule</strong></h3>
@@ -55,7 +54,7 @@
 				</div>
 			</div>
 
-			<!-- Add Employee  -->
+			<!-- Add Train  -->
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title"><strong>Add Train</strong></h3>
@@ -63,7 +62,7 @@
 				<div class="panel-body">
 	
 
-				<!-- Entry Form -->
+				<!-- Input Form -->
 				<form>
 					<div class="form-group">
 						<label for="">Train Name</label>
@@ -85,7 +84,7 @@
 						<input type="text" class="form-control" id="frequencyInput">
 					</div>
 					
-					<button type="submit" class="btn btn-primary" id="addEmployeeBtn">Submit</button>
+					<button type="submit" class="btn btn-primary" id="addTrain">Submit</button>
 				</form>
 
 				</div>
