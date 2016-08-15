@@ -1,4 +1,4 @@
-  /////////////// INITIALIZE FIREBASE///////////////////////
+/////////////// INITIALIZE FIREBASE ///////////////////////
 
   var config = {
     apiKey: "AIzaSyAQw0H8iTrTwDwvxb1eDYSbD8CC07Yq1Wg",
@@ -12,7 +12,7 @@
 
 
 
-  /////////////// ADD TRAINS TO FIREBASE ON USER INPUT///////////////////////
+/////////////// ADD TRAINS TO FIREBASE ON USER INPUT ///////////////////////
 
 $("#addTrain").on("click", function(){//add trains
 
@@ -50,7 +50,7 @@ $("#addTrain").on("click", function(){//add trains
 	return false;
 });
 
-  ///////////////WHEN TRAIN IS ADDED DO CALCULATIONS AND DISPLAY ///////////////////////
+/////// WHEN TRAIN IS ADDED DO CALCULATIONS AND DISPLAY ////////
 
 database.ref().on("child_added", function(childSnapshot){
 
@@ -107,5 +107,25 @@ database.ref().on("child_added", function(childSnapshot){
 
 	// Add each train's data into the table
 	$("#trainTable > tbody").append("<tr><td>" + newTrainName + "</td><td>" + newTrainDestination + "</td><td>" + newTrainFrequency  + "</td><td>" + nextArrival.format("hh:mm")  + "</td><td>" + tMinutesTillTrain + "</td><td>");
+
+});
+
+/////////////// PRESENCE SYSTEM ///////////////////////
+
+var connectionsRef = database.ref("/connections");//stablish reference
+
+var connectedRef = database.ref(".info/connected");
+
+connectedRef.on("value", function(snap) {//on value change
+
+	if( snap.val() ) {//if value changes
+		var connection = connectionsRef.push(true);//we add user the connection list
+		connection.onDisconnect().remove();//or we remove the user from the connection list when they disconnect.
+	};
+
+});
+
+connectionsRef.on("value", function(snap) {//displayed on browser
+	$("#schedulers").html('Number of user working on Master Schedule: ' + snap.numChildren());
 
 });
