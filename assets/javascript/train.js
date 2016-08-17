@@ -10,42 +10,17 @@
 
   var database = firebase.database();
 
-  /////////////// AUTHENTICATION ///////////////////////
+ /////////////// CLOCK ///////////////////////
 
-  $("#sign").on("click", function(){
-  	console.log('sign-in works!!');
+	function displayTime() {
+	    var time = moment().format('HH:mm:ss');
+	    $('#clock').html(time);
+	    setTimeout(displayTime, 1000);
+	}
 
-  	var provider = new firebase.auth.GoogleAuthProvider();//instance of Google provider 
-
-		firebase.auth().signInWithPopup(provider).then(function(result) {
-		  // This gives you a Google Access Token. You can use it to access the Google API.
-		  var token = result.credential.accessToken;
-		  // The signed-in user info.
-		  var user = result.user;
-
-		  // ...
-		}).catch(function(error) {
-		  // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		  // The email of the user's account used.
-		  var email = error.email;
-		  // The firebase.auth.AuthCredential type that was used.
-		  var credential = error.credential;
-		  
-		});
-  });
-
-
-
-
-firebase.auth().signOut().then(function() {
-  // Sign-out successful.
-}, function(error) {
-  // An error happened.
-});
-
-
+	$(document).ready(function() {
+	    displayTime();
+	});
 
 /////////////// ADD TRAINS TO FIREBASE ON USER INPUT ///////////////////////
 
@@ -85,11 +60,18 @@ $("#addTrain").on("click", function(){//add trains
 	return false;
 });
 
+
 /////// WHEN TRAIN IS ADDED DO CALCULATIONS AND DISPLAY ////////
+var time; 
+	function updateTime() {
+	    var time = moment().format('HH:mm:ss');
+	    setTimeout(updateTime, 1000);
+	    
+	}
+	updateTime();
+
 
 database.ref().on("child_added", function(childSnapshot){
-
-	// console.log(childSnapshot.val());
 
 	// Store everything into a variable.
 	var newTrainName = childSnapshot.val().trainName;
@@ -103,25 +85,13 @@ database.ref().on("child_added", function(childSnapshot){
 	console.log('First Train was: ' + newTrainFirstDeparture);
 	console.log('Train Frequency: ' + newTrainFrequency);
 
-	//Get current time
-	var now = moment().format("HH:mm");
-	console.log('The time is: ' + now );
-
-	//Calculate next time arrival
-	// newTrainFirstDeparture
-
-		// var tFrequency = 3;
-		var firstTime = newTrainFirstDeparture; 
 		var nextArrival = "TBD";
 		var minutesAway = "TBD"
 		
 		var firstTrainEver = moment(newTrainFirstDeparture, "HH:mm").subtract(1, "years");
 		console.log("Coverted 1st time " + firstTrainEver);
 
-		// // Current Time
-		// var currentTime = moment();
-		// console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-
+	
 		// Difference between the times
 		var diffTime = moment().diff(moment(firstTrainEver), "days");
 		console.log("DIFFERENCE IN TIME: " + diffTime);
@@ -144,6 +114,7 @@ database.ref().on("child_added", function(childSnapshot){
 	$("#trainTable > tbody").append("<tr><td>" + newTrainName + "</td><td>" + newTrainDestination + "</td><td>" + newTrainFrequency  + "</td><td>" + nextArrival.format("hh:mm")  + "</td><td>" + tMinutesTillTrain + "</td><td>" + "<button data-name='" + newTrainName + "'class='btn btn-default btn-block btn-xs btn-danger'>Delete Schedule</button>" + "</td></tr>");
 });
 
+/////////////// DELETE BUTTON FUNCTION///////////////////////
 
 $(document.body).on('click', '.btn-danger', function(){
 
@@ -155,8 +126,6 @@ $(document.body).on('click', '.btn-danger', function(){
 	});
 	
 });
-
-
 
 /////////////// PRESENCE SYSTEM ///////////////////////
 
