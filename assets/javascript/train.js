@@ -10,29 +10,32 @@
 
   var database = firebase.database();
 
-/////////////// AUTHENTICATION ///////////////////////
+  /////////////// AUTHENTICATION ///////////////////////
 
-var provider = new firebase.auth.GoogleAuthProvider();//instance of Google provider 
+  $("#sign").on("click", function(){
+  	console.log('sign-in works!!');
 
-function signIn(){
-firebase.auth().signInWithPopup(provider).then(function(result) {
-  // This gives you a Google Access Token. You can use it to access the Google API.
-  var token = result.credential.accessToken;
-  // The signed-in user info.
-  var user = result.user;
-console.log(result)
-  // ...
-}).catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-  
-});
-}
+  	var provider = new firebase.auth.GoogleAuthProvider();//instance of Google provider 
+
+		firebase.auth().signInWithPopup(provider).then(function(result) {
+		  // This gives you a Google Access Token. You can use it to access the Google API.
+		  var token = result.credential.accessToken;
+		  // The signed-in user info.
+		  var user = result.user;
+
+		  // ...
+		}).catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  // The email of the user's account used.
+		  var email = error.email;
+		  // The firebase.auth.AuthCredential type that was used.
+		  var credential = error.credential;
+		  
+		});
+  });
+
 
 
 
@@ -41,6 +44,7 @@ firebase.auth().signOut().then(function() {
 }, function(error) {
   // An error happened.
 });
+
 
 
 /////////////// ADD TRAINS TO FIREBASE ON USER INPUT ///////////////////////
@@ -72,10 +76,10 @@ $("#addTrain").on("click", function(){//add trains
 
 
 	// Reset input text-boxes to empty
-	$("#employeeNameInput").val("");
-	$("#roleInput").val("");
-	$("#startInput").val("");
-	$("#rateInput").val("");
+	$("#trainNameInput").val("");
+	$("#destinationInput").val("");
+	$("#firstTimeInput").val("");
+	$("#frequencyInput").val("");
 
 	// Prevents moving to new page
 	return false;
@@ -137,9 +141,22 @@ database.ref().on("child_added", function(childSnapshot){
 
 
 	// Add each train's data into the table
-	$("#trainTable > tbody").append("<tr><td>" + newTrainName + "</td><td>" + newTrainDestination + "</td><td>" + newTrainFrequency  + "</td><td>" + nextArrival.format("hh:mm")  + "</td><td>" + tMinutesTillTrain + "</td><td>");
-
+	$("#trainTable > tbody").append("<tr><td>" + newTrainName + "</td><td>" + newTrainDestination + "</td><td>" + newTrainFrequency  + "</td><td>" + nextArrival.format("hh:mm")  + "</td><td>" + tMinutesTillTrain + "</td><td>" + "<button data-name='" + newTrainName + "'class='btn btn-default btn-block btn-xs btn-danger'>Delete Schedule</button>" + "</td></tr>");
 });
+
+
+$(document.body).on('click', '.btn-danger', function(){
+
+	$( "tr" ).click(function() {
+	  var index = $( "tr" ).index( this );
+	  var tableContents = $("#trainTable > tbody").children()
+	  tableContents.eq(index-1).remove();
+	  
+	});
+	
+});
+
+
 
 /////////////// PRESENCE SYSTEM ///////////////////////
 
@@ -160,4 +177,6 @@ connectionsRef.on("value", function(snap) {//displayed on browser
 	$("#schedulers").html('Number of user working on Master Schedule: ' + snap.numChildren());
 
 });
+
+
 
